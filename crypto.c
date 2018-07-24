@@ -50,7 +50,7 @@ void crypto_hash(byte_string_t md_value, byte_string_t bs)
 //hash a byte_string to a byte_string of certain length
 //TODO: clarify this
 {
-    EVP_MD_CTX mdctx;
+    EVP_MD_CTX *mdctx = EVP_MD_CTX_new();
     int i;
 
     byte_string_init(md_value, md_length); //EVP_MAX_MD_SIZE
@@ -58,13 +58,15 @@ void crypto_hash(byte_string_t md_value, byte_string_t bs)
     EVP_DigestInit(&mdctx, md);
     EVP_DigestUpdate(&mdctx, bs->data, bs->len);
     EVP_DigestFinal(&mdctx, md_value->data, &i);
+
+    EVP_MD_CTX_free(mdctx);
 }
 
 void crypto_va_hash(byte_string_t md_value, int n, ...)
 //vararg version
 //hashes the concatenation of some number of byte_strings
 {
-    EVP_MD_CTX mdctx;
+    EVP_MD_CTX *mdctx = EVP_MD_CTX_new();
     va_list ap;
     int i;
     byte_string_ptr bs;
@@ -81,6 +83,8 @@ void crypto_va_hash(byte_string_t md_value, int n, ...)
     va_end(ap);
 
     EVP_DigestFinal(&mdctx, md_value->data, &i);
+
+    EVP_MD_CTX_free(mdctx);
 }
 
 int crypto_generate_key(byte_string_t key)
