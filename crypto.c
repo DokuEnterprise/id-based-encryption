@@ -22,7 +22,9 @@ See LICENSE for license
 //when we upgrade to 0.9.7 remove these macros:
 #define do_nothing ((void) (0))
 #define HMAC_CTX_init(x) do_nothing
-#define HMAC_CTX_cleanup(x) HMAC_cleanup(x)
+
+// Last thing to fix
+#define HMAC_CTX_cleanup(x) void(x)
 
 static EVP_MD *md;
 static int md_length;
