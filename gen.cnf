@@ -1,7 +1,7 @@
 ;config file for public params and master key generator
 
 ;filename to save public params to
-params = params.txt
+params = params_public.txt
 
 ;t-out-of-n sharing
 threshold = 1
@@ -14,7 +14,7 @@ pbits = 512
 qbits = 160
 
 ;filenames of secret shares
-sharefiles = share;share2
+sharefiles = share
 
 ;name of system
-system = test
+system = quantum

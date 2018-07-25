@@ -80,9 +80,10 @@ int main(int argc, char **argv)
     IBE_setup(params, master, bits, qbits, systemid);
     byte_string_printf(master, " %02X");
 
+    // This is where segmentation fault occurs
     FMT_split_master(sharefile, master, t, n, params);
 
-    FMT_save_params(paramsfile, params);
+    /*FMT_save_params(paramsfile, params);
 
     // test it works
     if (0) {
@@ -96,7 +97,7 @@ int main(int argc, char **argv)
 
     params_clear(params);
 
-    IBE_clear();
+    IBE_clear();*/
 
     return 0;
 }
