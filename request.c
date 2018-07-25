@@ -235,7 +235,7 @@ int request(int argc, char **argv)
 
     SSL_library_init();
 
-    ssl_ctx = SSL_CTX_new(SSLv3_method());
+    ssl_ctx = SSL_CTX_new(SSLv23_method());
     if (!ssl_ctx) {
 	fprintf(stderr, "SSL_CTX_new: failure\n");
 	return(-1);

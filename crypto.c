@@ -14,17 +14,11 @@ See LICENSE for license
 #include <string.h>
 #include <openssl/rand.h>
 #include <openssl/bn.h>
+#include <openssl/hmac.h>
 #include <gmp.h>
 #include "crypto.h"
 #include "byte_string.h"
 
-//OpenSSL will be changed soon, I've started preparing for this
-//when we upgrade to 0.9.7 remove these macros:
-#define do_nothing ((void) (0))
-#define HMAC_CTX_init(x) do_nothing
-
-// Last thing to fix
-#define HMAC_CTX_cleanup(x) void(x)
 
 static EVP_MD *md;
 static int md_length;
@@ -116,7 +110,7 @@ int crypto_generate_salt(byte_string_t salt)
 
 void crypto_ctx_init(crypto_ctx_t c)
 {
-    HMAC_CTX_init(&c->macctx);
+    c->macctx = HMAC_CTX_new();
     EVP_CIPHER_CTX_init(&c->ctx);
     c->auxbuf->len = 0;
     c->ivbuf->len = 0;
@@ -124,7 +118,7 @@ void crypto_ctx_init(crypto_ctx_t c)
 
 void crypto_ctx_clear(crypto_ctx_t c)
 {
-    HMAC_CTX_cleanup(&c->macctx);
+    HMAC_CTX_free(&c->macctx);
     EVP_CIPHER_CTX_cleanup(&c->ctx);
 
     if (c->auxbuf->len) {
