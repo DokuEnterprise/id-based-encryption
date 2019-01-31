@@ -75,7 +75,7 @@ static void mime_put(byte_string_t bs, FILE *outfp)
     int outl;
     int i, l;
 
-    EVP_ENCODE_CTX *ctx = EVP_ENCODE_CTX_new();
+    EVP_ENCODE_CTX ctx;
 
     EVP_EncodeInit(&ctx);
 
@@ -90,15 +90,13 @@ static void mime_put(byte_string_t bs, FILE *outfp)
     }
     EVP_EncodeFinal(&ctx,out,&outl);
     fwrite(out, 1, outl, outfp);
-
-    EVP_ENCODE_CTX_free(ctx);
 }
 
 static void mime_get(byte_string_t bs, FILE *infp)
 {
     char line[crypt_buf_size];
     int l, l2;
-    EVP_ENCODE_CTX *mime = EVP_ENCODE_CTX_new();
+    EVP_ENCODE_CTX mime;
 
     byte_string_init(bs, 1024);
     EVP_DecodeInit(&mime);
@@ -117,8 +115,6 @@ static void mime_get(byte_string_t bs, FILE *infp)
     }
     EVP_DecodeFinal(&mime, &bs->data[l], &l2);
     byte_string_reinit(bs, l + l2);
-
-    EVP_ENCODE_CTX_free(mime);
 }
 
 void FMT_encrypt_stream_array(char **id, int idcount,
@@ -130,7 +126,7 @@ void FMT_encrypt_stream_array(char **id, int idcount,
     unsigned char *out;
     int inl, outl;
     crypto_ctx_t ctx;
-    EVP_ENCODE_CTX *mime = EVP_ENCODE_CTX_new();
+    EVP_ENCODE_CTX mime;
     unsigned char data[1024];
     int i;
     int count;
@@ -185,8 +181,6 @@ void FMT_encrypt_stream_array(char **id, int idcount,
 
     byte_string_clear(K);
     byte_string_clear(U);
-
-    EVP_ENCODE_CTX_free(mime);
 }
 
 void FMT_encrypt_stream(char *id, FILE *infp, FILE *outfp, params_t params)
@@ -205,7 +199,7 @@ int FMT_decrypt_stream(char *id, byte_string_t key,
     int inl, outl;
     unsigned char data[1024];
     int count;
-    EVP_ENCODE_CTX *mime = EVP_ENCODE_CTX_new();
+    EVP_ENCODE_CTX mime;
     int result = 0;
     char *s, slen;
     int status;
@@ -274,8 +268,6 @@ int FMT_decrypt_stream(char *id, byte_string_t key,
     byte_string_clear(K);
     byte_string_clear(U);
     byte_string_clear(V);
-
-    EVP_ENCODE_CTX_free(mime);
 
     return result;
 }

@@ -12,13 +12,12 @@ See LICENSE for license
 #define CRYPTO_H
 #include "byte_string.h"
 #include <gmp.h>
-#include <openssl/ossl_typ.h>
 #include <openssl/evp.h>
 #include <openssl/hmac.h>
 
 struct crypto_ctx_s {
-    EVP_CIPHER_CTX *ctx;
-    HMAC_CTX *macctx;
+    EVP_CIPHER_CTX ctx;
+    HMAC_CTX macctx;
     int state;
     byte_string_t auxbuf;
     byte_string_t ivbuf;

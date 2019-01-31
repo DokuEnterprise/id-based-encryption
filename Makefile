@@ -33,7 +33,7 @@ GMP_I=/home/ben/cross/gmp/include
 GMP_L=/home/ben/cross/gmp/lib
 
 WIN_LIBS=-lwsock32 -lgdi32
-CFLAGS= -DNDEBUG -pipe -O2 -lcrypto -march=i386 -Wall -I$(GMP_I) -I$(SSL_I)
+CFLAGS= -DNDEBUG -pipe -O2 -march=i386 -Wall -I$(GMP_I) -I$(SSL_I)
 BINARIES=gen.exe ibe.exe #pkghtml.exe
 BINDISTFILES=$(BINARIES) gen.cnf ibe.cnf ibe_help.txt
 OSNAME=win32
@@ -42,12 +42,12 @@ else
 
 #gcc-3.0 seems faster
 CC=gcc
-SSL_I=/usr/include/openssl
-SSL_L=/usr/lib/x86_64-linux-gnu
+SSL_I=/usr/local/openssl-1.0
+SSL_L=/home/professor/Documents/Projects/id-based-encryption/libssl.so.1.0.0
 GMP_I=/usr/include
 GMP_L=/usr/lib/x86_64-linux-gnu
 
-CFLAGS= -DNDEBUG -pipe -O3 -lcrypto -march=x86-64 -Wall -I$(GMP_I) -I$(SSL_I) \
+CFLAGS= -DNDEBUG -pipe -O3 -march=x86-64 -Wall -I$(GMP_I) -I$(SSL_I) \
 -fomit-frame-pointer -ffast-math -funroll-loops
 BINARIES=gen pkghtml ibe infect
 TESTBINS=bs_test fp2_test curve_test ibe_test bls_test sig_test torture
