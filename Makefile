@@ -48,10 +48,11 @@ GMP_I=/usr/include
 GMP_L=/usr/lib/x86_64-linux-gnu
 
 CFLAGS= -DNDEBUG -pipe -O3 -march=x86-64 -Wall -I$(GMP_I) -I$(SSL_I) \
--fomit-frame-pointer -ffast-math -funroll-loops
+-fomit-frame-pointer -ffast-math -funroll-loops -fPIC
 BINARIES=gen pkghtml ibe infect
 TESTBINS=bs_test fp2_test curve_test ibe_test bls_test sig_test torture
 OSNAME=linux
+
 endif
 
 ifdef MM
@@ -71,6 +72,10 @@ endif
 CRYPTO_LIBS=-L$(SSL_L) -lcrypto
 SSL_LIBS=-L$(SSL_L) -lssl -lcrypto
 GMP_LIBS=-L$(GMP_L) -lgmp
+OBJECTS= $(shell echo *.o)
+
+LDFLAGS = -shared  $(SSL_LIBS) $(GMP_LIBS)
+
 
 IBE_LIBS=ibe_lib.o curve.o fp2.o crypto.o byte_string.o $(OPT_LIBS)
 FMT_LIBS=$(IBE_LIBS) format.o
@@ -157,6 +162,8 @@ curve.o: curve.c curve.h
 
 fp2.o: fp2.c fp2.h
 
+lib: 
+	$(CC)  $(OBJECTS) -o libstanfordibe.so $(LDFLAGS)
 gen: gen.o $(FMT_LIBS) config.o
 	$(CC) $(CFLAGS) -o $@ $^ $(GMP_LIBS) $(CRYPTO_LIBS)
 
@@ -207,7 +214,7 @@ dist: $(ALLFILES)
 	-rm -rf $(projname)
 
 clean:
-	-rm -rf *.o $(BINARIES) $(TESTBINS) $(SOFTLINKFILES)
+	-rm -rf *.o $(BINARIES) $(TESTBINS) $(SOFTLINKFILES) libstanfordibe.so
 
 ifdef WIN32
 bindist: $(BINDISTFILES)

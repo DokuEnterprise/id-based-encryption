@@ -23,9 +23,9 @@ int main(void)
     //generate new system parameters:
     //128-bit prime, 64-bit subgroup size
 
-    IBE_setup(params, master, 512, 160, "test");
+    IBE_setup(params, master, 512, 160, "dokuenterprise");
 
-    id = "blynn@stanford.edu";
+    id = "friedrichdoku@gmail.com";
 
     printf("IBE test program\n");
     printf("Test ID: %s\n", id);
