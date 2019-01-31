@@ -47,9 +47,10 @@ SSL_L=/home/professor/Documents/Projects/id-based-encryption/libssl.so.1.0.0
 GMP_I=/usr/include
 GMP_L=/usr/lib/x86_64-linux-gnu
 
+
 CFLAGS= -DNDEBUG -pipe -O3 -march=x86-64 -Wall -I$(GMP_I) -I$(SSL_I) \
 -fomit-frame-pointer -ffast-math -funroll-loops -fPIC
-BINARIES=gen pkghtml ibe infect
+BINARIES=gen  ibe infect
 TESTBINS=bs_test fp2_test curve_test ibe_test bls_test sig_test torture
 OSNAME=linux
 
@@ -126,7 +127,6 @@ get_time.c : get_time.$(OSNAME).c
 
 ibe_lib.o: ibe_lib.c ibe.h version.h benchmark.h
 
-ibe.o: ibe.c ibe.h
 decrypt.o: decrypt.c ibe.h
 encrypt.o: encrypt.c ibe.h
 request.o: request.c ibe.h netstuff.h
@@ -139,10 +139,6 @@ sign.o: sign.c ibe.h
 verify.o: verify.c ibe.h
 
 format.o: format.c format.h
-
-gen.o : gen.c ibe.h
-
-pkghtml.o : pkghtml.c ibe.h netstuff.h
 
 bls_test.o : bls_test.c
 
@@ -162,10 +158,9 @@ curve.o: curve.c curve.h
 
 fp2.o: fp2.c fp2.h
 
-lib: 
+install: 
 	$(CC)  $(OBJECTS) -o libstanfordibe.so $(LDFLAGS)
-gen: gen.o $(FMT_LIBS) config.o
-	$(CC) $(CFLAGS) -o $@ $^ $(GMP_LIBS) $(CRYPTO_LIBS)
+	cp libstanfordibe.so /usr/local/lib
 
 bs_test: bs_test.o byte_string.o $(OPT_LIBS)
 	$(CC) $(CFLAGS) -o $@ $^
@@ -185,23 +180,13 @@ ibe_test: ibe_test.o $(IBE_LIBS)
 infect: infect.o $(FMT_LIBS) config.o
 	$(CC) $(CFLAGS) -o $@ $^ $(SSL_LIBS) $(GMP_LIBS)
 
-pkghtml: pkghtml.o $(FMT_LIBS) config.o netstuff.o
-	    $(CC) $(CFLAGS) -o $@ $^ -lpthread $(SSL_LIBS) $(GMP_LIBS)
-
-ibe: ibe.o $(FMT_LIBS) $(IBE_PROGS) config.o
-	$(CC) $(CFLAGS) -o $@ $^ $(SSL_LIBS) $(GMP_LIBS)
-
 fp2_test: fp2_test.o fp2.o $(OPT_LIBS)
 	$(CC) $(CFLAGS) -o $@ $^ $(GMP_LIBS)
 
 curve_test: curve_test.o curve.o fp2.o $(OPT_LIBS)
 	$(CC) $(CFLAGS) -o $@ $^ $(GMP_LIBS)
 
-gen.exe: gen.o $(FMT_LIBS) config.o
-	$(CC) $(CFLAGS) -o $@ $^ $(GMP_LIBS) $(SSL_LIBS) $(WIN_LIBS)
 
-ibe.exe: ibe.o $(FMT_LIBS) $(IBE_PROGS) config.o
-	$(CC) $(CFLAGS) -o $@ $^ $(SSL_LIBS) $(GMP_LIBS) $(WIN_LIBS)
 
 projname := $(shell awk '/IBE_VERSION/ { print $$3 }' version.h )
 
